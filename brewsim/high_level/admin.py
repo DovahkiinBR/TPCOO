@@ -1,5 +1,5 @@
 # mysite/admin.py
-from djongo.contrib import admin
+from django.contrib import admin
 
 from . import models
 
