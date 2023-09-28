@@ -24,13 +24,16 @@ class Prix(models.Model):
     def __str__(self):
         return (
             f"Ingrédient {self.ingredient} du département"
-            f"{self.departement.numero} à {self.prix}€"
+            f" {self.departement.numero} à {self.prix}€"
         )
 
 
 class QuantiteIngredient(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantite = models.IntegerField()
+
+    def __str__(self):
+        return f"Ingredient {self.ingredient.nom} quantité {self.quantite}"
 
 
 class Machine(models.Model):
