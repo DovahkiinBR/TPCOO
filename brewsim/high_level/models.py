@@ -13,7 +13,7 @@ class Departement(models.Model):
     prixm2 = models.IntegerField()
 
     def __str__(self):
-        return self.numero + " " + self.prixm2
+        return f"Département {self.numero} + {self.prixm2}"
 
 
 class Prix(models.Model):
