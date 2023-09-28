@@ -12,6 +12,9 @@ class Departement(models.Model):
     numero = models.IntegerField()
     prixm2 = models.IntegerField()
 
+    def __str__(self):
+        return self.numero + " " + self.prixm2
+
 
 class Prix(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
