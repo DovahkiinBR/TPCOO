@@ -22,7 +22,10 @@ class Prix(models.Model):
     prix = models.IntegerField()
 
     def __str__(self):
-        return f"Ingrédient {self.ingredient} du département {self.departement} à €"
+        return (
+            f"Ingrédient {self.ingredient} du département"
+            f"{self.departement} à {self.prix}€"
+        )
 
 
 class QuantiteIngredient(models.Model):
