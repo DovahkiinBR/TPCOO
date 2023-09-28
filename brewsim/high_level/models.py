@@ -72,9 +72,18 @@ class Recette(models.Model):
 class Usine(models.Model):
     departement = models.ForeignKey(Departement, on_delete=models.PROTECT)
     taille = models.IntegerField()
-    machine = models.ForeignKey(Machine, on_delete=models.PROTECT)
+    machines = models.ForeignKey(Machine, on_delete=models.PROTECT)
     recettes = models.ForeignKey(Recette, on_delete=models.PROTECT)
     stocks = models.IntegerField()
 
     def __str__(self):
         return f"Usine du {self.departement}"
+
+    def somme_machines(self):
+        som = 0
+        for i in self.machines:
+            som = som + i.prix
+        return som
+
+    def costs(self):
+        return self.departement.prixm2 * self.taille + self.somme_machines()
