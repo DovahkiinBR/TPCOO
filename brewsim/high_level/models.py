@@ -13,7 +13,7 @@ class Departement(models.Model):
     prixm2 = models.IntegerField()
 
     def __str__(self):
-        return f"Département {self.numero} ({self.numero}€/m²)"
+        return f"Département {self.numero}"
 
 
 class Prix(models.Model):
@@ -41,7 +41,7 @@ class Machine(models.Model):
     prix = models.IntegerField()
 
     def __str__(self):
-        return self.nom
+        return f"{self.nom}"
 
 
 class Action(models.Model):
@@ -58,7 +58,7 @@ class Action(models.Model):
     )
 
     def __str__(self):
-        return self.action
+        return f"{self.action}"
 
 
 class Recette(models.Model):
@@ -66,7 +66,7 @@ class Recette(models.Model):
     action = models.ForeignKey(Action, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.nom
+        return f"{self.nom}"
 
 
 class Usine(models.Model):
