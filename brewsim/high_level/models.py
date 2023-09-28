@@ -58,7 +58,7 @@ class Action(models.Model):
     )
 
     def __str__(self):
-        return f"{self.action}"
+        return f"{self.commande}"
 
 
 class Recette(models.Model):
