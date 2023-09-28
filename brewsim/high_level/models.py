@@ -13,7 +13,7 @@ class Departement(models.Model):
     prixm2 = models.IntegerField()
 
     def __str__(self):
-        return f"Département {self.numero} à {self.prixm2}€ par m²"
+        return self.numero
 
 
 class Prix(models.Model):
@@ -33,7 +33,7 @@ class QuantiteIngredient(models.Model):
     quantite = models.IntegerField()
 
     def __str__(self):
-        return f"Ingredient {self.ingredient.nom} quantité {self.quantite}"
+        return f"{self.ingredient.nom} quantité {self.quantite}"
 
 
 class Machine(models.Model):
@@ -41,7 +41,7 @@ class Machine(models.Model):
     prix = models.IntegerField()
 
     def __str__(self):
-        return f"Machine {self.nom} à {self.prix}€"
+        return self.nom
 
 
 class Action(models.Model):
@@ -58,10 +58,7 @@ class Action(models.Model):
     )
 
     def __str__(self):
-        return (
-            f"{self.action} necessitant {self.machine} et {self.ingredient} sur une"
-            f" durée de {self.duree} par la commande {self.commande}"
-        )
+        return self.action
 
 
 class Recette(models.Model):
@@ -69,7 +66,7 @@ class Recette(models.Model):
     action = models.ForeignKey(Action, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"Recette {self.nom} nécéssite {self.action}"
+        return self.nom
 
 
 class Usine(models.Model):
@@ -80,8 +77,4 @@ class Usine(models.Model):
     stocks = models.IntegerField()
 
     def __str__(self):
-        return (
-            f"Usine du {self.departement} de taille {self.taille} possédant les"
-            f" machines {self.machines} permettant de {self.recettes} avec des "
-            f"stocks de {self.stock}"
-        )
+        return f"Usine du {self.departement}"
