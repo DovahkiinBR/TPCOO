@@ -35,6 +35,12 @@ class QuantiteIngredient(models.Model):
     def __str__(self):
         return f"{self.ingredient.nom} quantité {self.quantite}"
 
+    def couts(self, departement):
+        return (
+            self.ingredient.prix_set.get(departement__numero=departement).prix
+            * self.quantite
+        )
+
 
 class Machine(models.Model):
     nom = models.CharField(max_length=50)
@@ -81,8 +87,14 @@ class Usine(models.Model):
 
     def somme_machines(self):
         som = 0
-        for i in self.machines:
+        for i in self.machines.all():
             som = som + i.prix
+        return som
+
+    def somme_ingredient(self):
+        som = 0
+        for i in self.stock.all():
+            som = som + i.QuantiteIngredient.quantite
         return som
 
     def costs(self):
