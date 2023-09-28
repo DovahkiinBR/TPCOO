@@ -66,7 +66,7 @@ class Recette(models.Model):
     action = models.ForeignKey(Action, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"Test {self.nom}"
+        return self.nom
 
 
 class Usine(models.Model):
