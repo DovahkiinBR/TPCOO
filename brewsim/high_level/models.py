@@ -24,7 +24,7 @@ class Prix(models.Model):
     def __str__(self):
         return (
             f"Ingrédient {self.ingredient} du département"
-            f"{self.departement} à {self.prix}€"
+            f"{self.departement.numero} à {self.prix}€"
         )
 
 
