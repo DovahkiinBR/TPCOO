@@ -40,6 +40,9 @@ class Machine(models.Model):
     nom = models.CharField(max_length=50)
     prix = models.IntegerField()
 
+    def __str__(self):
+        return f"Machine {self.nom} à {self.prix}€"
+
 
 class Action(models.Model):
     machine = models.ForeignKey(Machine, on_delete=models.PROTECT)
@@ -54,10 +57,19 @@ class Action(models.Model):
         related_name="+",
     )
 
+    def __str__(self):
+        return (
+            f"{self.action} necessitant {self.machine} et {self.ingredient} sur une"
+            f" durée de {self.duree} par la commande {self.commande}"
+        )
+
 
 class Recette(models.Model):
     nom = models.CharField(max_length=50)
     action = models.ForeignKey(Action, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"Recette {self.nom} nécéssite {self.action}"
 
 
 class Usine(models.Model):
@@ -66,3 +78,10 @@ class Usine(models.Model):
     machine = models.ForeignKey(Machine, on_delete=models.PROTECT)
     recettes = models.ForeignKey(Recette, on_delete=models.PROTECT)
     stocks = models.IntegerField()
+
+    def __str__(self):
+        return (
+            f"Usine du {self.departement} de taille {self.taille} possédant les"
+            f" machines {self.machines} permettant de {self.recettes} avec des "
+            f"stocks de {self.stock}"
+        )
