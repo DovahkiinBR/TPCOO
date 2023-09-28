@@ -91,11 +91,15 @@ class Usine(models.Model):
             som = som + i.prix
         return som
 
-    def somme_ingredient(self):
+    def somme_stocks(self):
         som = 0
-        for i in self.stock.all():
-            som = som + i.QuantiteIngredient.quantite
+        for i in self.stocks.all():
+            som = som + i.couts(self.departement.numero)
         return som
 
     def costs(self):
-        return self.departement.prixm2 * self.taille + self.somme_machines()
+        return (
+            self.departement.prixm2 * self.taille
+            + self.somme_machines()
+            + self.somme_stocks()
+        )
