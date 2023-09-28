@@ -13,13 +13,16 @@ class Departement(models.Model):
     prixm2 = models.IntegerField()
 
     def __str__(self):
-        return f"Département {self.numero} à {self.prixm2} euros au m²"
+        return f"Département {self.numero} à {self.prixm2}€ par m²"
 
 
 class Prix(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     departement = models.ForeignKey(Departement, on_delete=models.PROTECT)
     prix = models.IntegerField()
+
+    def __str__(self):
+        return f"Ingrédient {self.ingredient} du département {self.departement} à €"
 
 
 class QuantiteIngredient(models.Model):
