@@ -72,9 +72,9 @@ class Recette(models.Model):
 class Usine(models.Model):
     departement = models.ForeignKey(Departement, on_delete=models.PROTECT)
     taille = models.IntegerField()
-    machines = models.ForeignKey(Machine, on_delete=models.PROTECT)
-    recettes = models.ForeignKey(Recette, on_delete=models.PROTECT)
-    stocks = models.IntegerField()
+    machines = models.ManyToManyField(Machine)
+    recettes = models.ManyToManyField(Recette)
+    stocks = models.ManyToManyField(QuantiteIngredient)
 
     def __str__(self):
         return f"Usine du {self.departement}"
