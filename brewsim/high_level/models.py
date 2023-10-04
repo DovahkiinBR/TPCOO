@@ -18,6 +18,9 @@ class Departement(models.Model):
     def __str__(self):
         return f"Département {self.numero}"
 
+    def json(self):
+        return {"numero": self.numero, "prixm2": self.prixm2}
+
 
 class Prix(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
@@ -29,6 +32,13 @@ class Prix(models.Model):
             f"Ingrédient {self.ingredient} du département"
             f" {self.departement.numero} à {self.prix}€"
         )
+
+    def json(self):
+        return {
+            "ingredient": self.ingredient,
+            "departement": self.departement,
+            "prix": self.prix,
+        }
 
 
 class QuantiteIngredient(models.Model):
@@ -44,6 +54,9 @@ class QuantiteIngredient(models.Model):
             * self.quantite
         )
 
+    def json(self):
+        return {"ingredient": self.ingredient, "quantite": self.quantite}
+
 
 class Machine(models.Model):
     nom = models.CharField(max_length=50)
@@ -51,6 +64,9 @@ class Machine(models.Model):
 
     def __str__(self):
         return f"{self.nom}"
+
+    def json(self):
+        return {"nom": self.nom, "prix": self.prix}
 
 
 class Action(models.Model):
@@ -69,6 +85,15 @@ class Action(models.Model):
     def __str__(self):
         return f"{self.commande}"
 
+    def json(self):
+        return {
+            "machine": self.machine,
+            "ingredient": self.ingredient,
+            "commande": self.commande,
+            "duree": self.duree,
+            "action": self.action,
+        }
+
 
 class Recette(models.Model):
     nom = models.CharField(max_length=50)
@@ -76,6 +101,9 @@ class Recette(models.Model):
 
     def __str__(self):
         return f"{self.nom}"
+
+    def json(self):
+        return {"nom": self.nom, "action": self.action}
 
 
 class Usine(models.Model):
@@ -107,5 +135,11 @@ class Usine(models.Model):
             + self.somme_stocks()
         )
 
-
-# Serialiser les modèles avec JSON
+    def json(self):
+        return {
+            "departement": self.departement,
+            "taille": self.taille,
+            "machines": self.machines,
+            "recettes": self.recettes,
+            "stocks": self.stocks,
+        }
