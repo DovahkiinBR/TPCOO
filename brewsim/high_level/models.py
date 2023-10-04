@@ -10,6 +10,9 @@ class Ingredient(models.Model):
     def json(self):
         return {"nom": self.nom}
 
+    def json_extended(self):
+        return self.json()
+
 
 class Departement(models.Model):
     numero = models.IntegerField()
@@ -20,6 +23,9 @@ class Departement(models.Model):
 
     def json(self):
         return {"numero": self.numero, "prixm2": self.prixm2}
+
+    def json_extended(self):
+        return self.json()
 
 
 class Prix(models.Model):
@@ -56,6 +62,9 @@ class QuantiteIngredient(models.Model):
 
     def json(self):
         return {"ingredient": self.ingredient.id, "quantite": self.quantite}
+
+    def json_extended(self):
+        return {"ingredient": self.ingredient.json_extended, "quantite": self.quantite}
 
 
 class Machine(models.Model):
