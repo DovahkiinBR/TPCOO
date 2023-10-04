@@ -35,8 +35,8 @@ class Prix(models.Model):
 
     def json(self):
         return {
-            "ingredient": self.ingredient,
-            "departement": self.departement,
+            "ingredient": self.ingredient.id,
+            "departement": self.departement.id,
             "prix": self.prix,
         }
 
@@ -55,7 +55,7 @@ class QuantiteIngredient(models.Model):
         )
 
     def json(self):
-        return {"ingredient": self.ingredient, "quantite": self.quantite}
+        return {"ingredient": self.ingredient.id, "quantite": self.quantite}
 
 
 class Machine(models.Model):
@@ -87,11 +87,11 @@ class Action(models.Model):
 
     def json(self):
         return {
-            "machine": self.machine,
-            "ingredient": self.ingredient,
+            "machine": self.machine.id,
+            "ingredient": self.ingredient.id,
             "commande": self.commande,
             "duree": self.duree,
-            "action": self.action,
+            "action": self.action.id,
         }
 
 
@@ -103,7 +103,7 @@ class Recette(models.Model):
         return f"{self.nom}"
 
     def json(self):
-        return {"nom": self.nom, "action": self.action}
+        return {"nom": self.nom, "action": self.action.id}
 
 
 class Usine(models.Model):
@@ -137,9 +137,9 @@ class Usine(models.Model):
 
     def json(self):
         return {
-            "departement": self.departement,
+            "departement": self.departement.id,
             "taille": self.taille,
-            "machines": self.machines,
-            "recettes": self.recettes,
-            "stocks": self.stocks,
+            "machines": [m.id for m in self.machines.all()],
+            "recettes": [r.id for r in self.recettes.all()],
+            "stocks": [s.id for s in self.stocks.all()],
         }
