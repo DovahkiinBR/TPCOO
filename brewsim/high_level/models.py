@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 
 
@@ -6,6 +8,9 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.nom
+
+    def json(self):
+        return json.dumps.self
 
 
 class Departement(models.Model):
@@ -103,3 +108,6 @@ class Usine(models.Model):
             + self.somme_machines()
             + self.somme_stocks()
         )
+
+
+# Serialiser les modèles avec JSON
