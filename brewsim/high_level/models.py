@@ -1,5 +1,3 @@
-import json
-
 from django.db import models
 
 
@@ -10,7 +8,7 @@ class Ingredient(models.Model):
         return self.nom
 
     def json(self):
-        return json.dumps.self
+        return {"nom": self.nom}
 
 
 class Departement(models.Model):
