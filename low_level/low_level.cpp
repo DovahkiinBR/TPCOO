@@ -8,15 +8,24 @@ class Departement{
 
     int numero_;
     float prixm2_;
-    json data_;
+    //json data_;
     int id_;
 
     public :
 
         Departement(int numero, float prixm2) : numero_{numero}, prixm2_{prixm2}{}
-        construct1(json data) : data_{data}{}
-        construct2(int id) : id_{id}{}
 
+//....................................................................................
+        Departement(const json& data)
+        {
+            numero_ = data["numero_"],prixm2_=data["prixm2_"];
+        }
+        Departement(int id) : numero_(id), prixm2_(0)
+       {
+        //cpr::Response r  = cpr::Get(cpr::Url("http://localhost:8000/departement/"+ std::string (id)));
+       }
+
+// ....................................................................................
         friend std::ostream& operator<<(std::ostream& out, const Departement& D) {
         return out << D.numero_ << " / " << D.prixm2_;
         }
