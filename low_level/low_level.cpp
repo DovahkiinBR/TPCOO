@@ -7,31 +7,32 @@ using json = nlohmann::json;
 // Classe représentant un département
 class Departement {
 public:
-    Departement(int numero, int prix_m2);
-    Departement(json& data);
+    Departement(int numero, int prixm2);
+    Departement(json data);
     Departement(int id);
 
     friend std::ostream& operator << (std::ostream& out, const Departement& p);
 
 private:
-    int numero_Departement;
-    float prix_m2_Departement;
+    int numero;
+    float prixm2;
 };
 
-Departement::Departement(int numero, int prix_m2) : numero_Departement(numero), prix_m2_Departement(prix_m2) {}
+Departement::Departement(int numero, int prixm2) : numero(numero), prixm2(prixm2) {}
 
-Departement::Departement(json data) : numero_Departement(data["numero"]), prix_m2_Departement(data["prix_m2"]) {}
+Departement::Departement(json data) : numero(data["numero"]), prixm2(data["prixm2"]) {}
 
 Departement::Departement(int id) {
+    std::cout << "Requete http http://localhost:8000/departement/ :" + std::to_string(id) << std::endl;
     std::string link = "http://localhost:8000/departement/" + std::to_string(id);
     cpr::Response r  = cpr::Get(cpr::Url(link));
     json data = json::parse(r.text);
-    numero_Departement = data["numero"];
-    prix_m2_Departement = data["prix_m2"];
+    numero = data["numero"];
+    prixm2 = data["prixm2"];
 }
 
 std::ostream& operator << (std::ostream& out, const Departement& p) {
-    return out << "Numero de Departement : " << p.numero_Departement << " / " << "Prix en m² : " << p.prix_m2_Departement;
+    return out << "Numero de Departement : " << p.numero << " / " << "Prix en m² : " << p.prixm2;
 }
 
 // Classe représentant un ingrédient
@@ -51,11 +52,11 @@ Ingredient::Ingredient(int id) {
 // ... (définitions similaires pour les autres classes)
 
 int main() {
-    cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Departement/1"});
+    cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/departement/6"});
     json data = json::parse(r.text);
     std::cout << "Reponse HTTP :" << std::endl;
     std::cout << r.text << "\n";
-    Departement d{1};
+    Departement d{6};
     std::cout << "d : " << d << std::endl;
 
     return 0;
