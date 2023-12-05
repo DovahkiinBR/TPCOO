@@ -8,22 +8,17 @@ using json = nlohmann::json;
 class Departement {
 public:
     Departement(int numero, int prixm2);
-    Departement(json data);
+    //Departement(json data);
     Departement(int id);
-
-    friend std::ostream& operator << (std::ostream& out, const Departement& p);
-
-private:
     int numero;
     float prixm2;
+
+    friend std::ostream& operator << (std::ostream& out, const Departement& p){ return out <<"Departement : " << p.numero << "prix au m² : " << p.prixm2;
+    }
 };
 
-Departement::Departement(int numero, int prixm2) : numero(numero), prixm2(prixm2) {}
-
-Departement::Departement(json data) : numero(data["numero"]), prixm2(data["prixm2"]) {}
-
 Departement::Departement(int id) {
-    std::cout << "Requete http http://localhost:8000/departement/ :" + std::to_string(id) << std::endl;
+    std::cout << "Requete http://localhost:8000/departement/ :" + std::to_string(id) << std::endl;
     std::string link = "http://localhost:8000/departement/" + std::to_string(id);
     cpr::Response r  = cpr::Get(cpr::Url(link));
     json data = json::parse(r.text);
@@ -31,33 +26,65 @@ Departement::Departement(int id) {
     prixm2 = data["prixm2"];
 }
 
-std::ostream& operator << (std::ostream& out, const Departement& p) {
-    return out << "Numero de Departement : " << p.numero << " / " << "Prix en m² : " << p.prixm2;
-}
 
-// Classe représentant un ingrédient
+
 class Ingredient {
 public:
+
     Ingredient(int id);
-    std::string nom_Ingredient;
+    std::string nom;
+
+    friend std::ostream& operator << (std::ostream& out, const Ingredient& p){ return out <<"Ingredient : " << p.nom;
+    }
 };
 
 Ingredient::Ingredient(int id) {
     std::string link = "http://localhost:8000/ingredient/" + std::to_string(id);
     cpr::Response r  = cpr::Get(cpr::Url(link));
     json data = json::parse(r.text);
-    nom_Ingredient = data["nom"];
+    nom = data["nom"];
 }
 
-// ... (définitions similaires pour les autres classes)
+class Prix {
+public:
+
+    Prix(int id);
+    Prix(json data);
+
+    std::unique_ptr<Ingredient> ingredient;
+    std::unique_ptr<Departement> departement;
+    int prix;
+
+    friend std::ostream& operator << (std::ostream& out, const Prix& p){ return out <<"Prix de l'ingredient " << *p.ingredient << " dans le " << p.departement->numero << " de : " << p.prix << " €.";
+    }
+};
+
+Prix::Prix(int id) {
+    std::string link = "http://localhost:8000/prix/" + std::to_string(id);
+    cpr::Response r  = cpr::Get(cpr::Url(link));
+    json data = json::parse(r.text);
+    departement = std::make_unique<Departement>(data["departement"]);
+    ingredient = std::make_unique<Ingredient>(data["ingredient"]);
+    prix = data["prix"];
+}
+
 
 int main() {
+    //Departement
     cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/departement/6"});
     json data = json::parse(r.text);
-    std::cout << "Reponse HTTP :" << std::endl;
-    std::cout << r.text << "\n";
     Departement d{6};
-    std::cout << "d : " << d << std::endl;
-
+    std::cout << "Departement d{selectionné}: " << d << std::endl;
+    //Ingredient
+    cpr::Response r2 = cpr::Get(cpr::Url{"http://localhost:8000/ingredient/12"});
+    json data2 = json::parse(r2.text);
+    Ingredient i{12};
+    std::cout << "Ingredient i{selectionné}: " << i << std::endl;
+    //Prix
+    cpr::Response r3 = cpr::Get(cpr::Url{"http://localhost:8000/prix/7"});
+    std::cout << r3.text << std::endl;
+    json data3 = json::parse(r3.text);
+    Prix p{7};
+    std::cout << "Prix p{selectionné}: " << p << std::endl;
     return 0;
 }
