@@ -1,45 +1,62 @@
 #include <iostream>
 #include <cpr/cpr.h>
-#include <stdlib.h>
 #include <nlohmann/json.hpp>
-using namespace std;
+
 using json = nlohmann::json;
-class Departement{
 
-    int numero_;
-    float prixm2_;
-    //json data_;
-    int id_;
+// Classe représentant un département
+class Departement {
+public:
+    Departement(int numero, int prix_m2);
+    Departement(json& data);
+    Departement(int id);
 
-    public :
+    friend std::ostream& operator << (std::ostream& out, const Departement& p);
 
-        Departement(int numero, float prixm2) : numero_{numero}, prixm2_{prixm2}{}
-
-//....................................................................................
-        Departement(const json& data)
-        {
-            numero_ = data["numero_"],prixm2_=data["prixm2_"];
-        }
-        Departement(int id) : numero_(id), prixm2_(0)
-       {
-        //cpr::Response r  = cpr::Get(cpr::Url("http://localhost:8000/departement/"+ std::string (id)));
-       }
-
-// ....................................................................................
-        friend std::ostream& operator<<(std::ostream& out, const Departement& D) {
-        return out << D.numero_ << " / " << D.prixm2_;
-        }
+private:
+    int numero_Departement;
+    float prix_m2_Departement;
 };
 
-auto main()-> int{
+Departement::Departement(int numero, int prix_m2) : numero_Departement(numero), prix_m2_Departement(prix_m2) {}
 
-    //std::cout << Departement{31, 20} << "\n";
-    cpr::Response r  = cpr::Get(cpr::Url("http://localhost:8000/departement/6"));
-    json j = json::parse(r.text);
-    //std::string numero1 = j["numero"];
-    //int prix = j["prixm2"];
+Departement::Departement(json data) : numero_Departement(data["numero"]), prix_m2_Departement(data["prix_m2"]) {}
 
-    std::cout << j << std::endl;
-    //std::cout << "Numero departement" << numero1 << std::endl;
-return 0;
+Departement::Departement(int id) {
+    std::string link = "http://localhost:8000/departement/" + std::to_string(id);
+    cpr::Response r  = cpr::Get(cpr::Url(link));
+    json data = json::parse(r.text);
+    numero_Departement = data["numero"];
+    prix_m2_Departement = data["prix_m2"];
+}
+
+std::ostream& operator << (std::ostream& out, const Departement& p) {
+    return out << "Numero de Departement : " << p.numero_Departement << " / " << "Prix en m² : " << p.prix_m2_Departement;
+}
+
+// Classe représentant un ingrédient
+class Ingredient {
+public:
+    Ingredient(int id);
+    std::string nom_Ingredient;
+};
+
+Ingredient::Ingredient(int id) {
+    std::string link = "http://localhost:8000/ingredient/" + std::to_string(id);
+    cpr::Response r  = cpr::Get(cpr::Url(link));
+    json data = json::parse(r.text);
+    nom_Ingredient = data["nom"];
+}
+
+// ... (définitions similaires pour les autres classes)
+
+int main() {
+    cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Departement/1"});
+    json data = json::parse(r.text);
+    std::cout << "Reponse HTTP :" << std::endl;
+    std::cout << r.text << "\n";
+    Departement d{1};
+    std::cout << "d : " << d << std::endl;
+
+    return 0;
 }
